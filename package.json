@@ -1,0 +1,26 @@
+{
+  "name": "open-music-api-dicoding",
+  "version": "1.0.0",
+  "description": "open music api",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "node src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuma-coffee/open-music-api-dicoding.git"
+  },
+  "keywords": [
+    "open",
+    "music",
+    "api",
+    "dicoding"
+  ],
+  "author": "kuma-coffee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kuma-coffee/open-music-api-dicoding/issues"
+  },
+  "homepage": "https://github.com/kuma-coffee/open-music-api-dicoding#readme"
+}

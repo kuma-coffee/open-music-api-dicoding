@@ -4,8 +4,9 @@
   "description": "open music api",
   "main": "src/server.js",
   "scripts": {
-    "test": "node src/server.js",
-    "start": "node src/server.js"
+    "prod": "NODE_ENV=production node ./src/server.js",
+    "dev": "nodemon ./src/server.js",
+    "migrate": "node-pg-migrate"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,16 @@
   "bugs": {
     "url": "https://github.com/kuma-coffee/open-music-api-dicoding/issues"
   },
-  "homepage": "https://github.com/kuma-coffee/open-music-api-dicoding#readme"
+  "homepage": "https://github.com/kuma-coffee/open-music-api-dicoding#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^21.3.2",
+    "dotenv": "^16.3.1",
+    "joi": "^17.11.0",
+    "nanoid": "^5.0.3",
+    "node-pg-migrate": "^6.2.2",
+    "pg": "^8.11.3"
+  }
 }

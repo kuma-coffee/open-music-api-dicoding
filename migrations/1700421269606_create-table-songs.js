@@ -28,16 +28,16 @@ exports.up = (pgm) => {
       type: "INTEGER",
       notNull: true,
     },
-    albumId: {
+    album_id: {
       type: "VARCHAR(255)",
       notNull: true,
     },
-    createdAt: {
+    created_at: {
       type: "TIMESTAMP",
       notNull: true,
       default: pgm.func("current_timestamp"),
     },
-    updateAt: {
+    updated_at: {
       type: "TIMESTAMP",
       notNull: true,
       default: pgm.func("current_timestamp"),

@@ -26,11 +26,11 @@ exports.up = (pgm) => {
     },
     duration: {
       type: "INTEGER",
-      notNull: true,
+      default: 0,
     },
     album_id: {
       type: "VARCHAR(255)",
-      notNull: true,
+      default: "",
     },
     created_at: {
       type: "TIMESTAMP",

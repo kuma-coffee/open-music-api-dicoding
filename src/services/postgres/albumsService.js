@@ -44,23 +44,8 @@ class AlbumService {
       throw new NotFoundError("Album not found");
     }
 
-    return result.rows.map(mapDBToAlbum)[0];
+    return mapDBToAlbum(result.rows[0]);
   }
-
-  // async getAlbumAndSongsById(id) {
-  //   const query = {
-  //     text: "SELECT * FROM albums LEFT JOIN songs ON albums.id = songs.album_id WHERE albums.id = $1 ",
-  //     values: [id],
-  //   };
-
-  //   const result = await this._pool.query(query);
-  //   console.log(result);
-  //   if (!result.rows.length) {
-  //     throw new NotFoundError("Album not found");
-  //   }
-
-  //   // return result.rows.map(mapDBToAlbum)[0];
-  // }
 
   async editAlbumById(id, { name, year }) {
     const updateAt = new Date().toISOString();

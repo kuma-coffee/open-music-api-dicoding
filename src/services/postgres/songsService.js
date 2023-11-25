@@ -71,6 +71,21 @@ class SongService {
     return result.rows.map(mapDBToSong)[0];
   }
 
+  async getSongByAlbumId(id) {
+    const query = {
+      text: "SELECT * FROM songs WHERE album_id = $1",
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      return [];
+    }
+
+    return result.rows.map(mapDBToSong);
+  }
+
   async editSongById(id, { title, year, genre, performer, duration, albumId }) {
     const updateAt = new Date().toISOString();
 

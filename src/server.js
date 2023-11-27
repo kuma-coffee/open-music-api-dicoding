@@ -16,6 +16,11 @@ const songs = require("./api/songs");
 const SongsService = require("./services/postgres/songsService");
 const SongsValidator = require("./validator/songs");
 
+// playlist
+const playlists = require("./api/playlists");
+const PlaylistsService = require("./services/postgres/playlistsService");
+const PlaylistsValidator = require("./validator/playlist");
+
 // users
 const users = require("./api/users");
 const UsersService = require("./services/postgres/usersService");
@@ -27,9 +32,28 @@ const AuthenticationsService = require("./services/postgres/authenticationsServi
 const TokenManager = require("./tokenize/TokenManager");
 const AuthenticationsValidator = require("./validator/authentications");
 
+// collaborations
+const collaborations = require("./api/collaborations");
+const CollaborationsService = require("./services/postgres/collaborationsService");
+const CollaborationsValidator = require("./validator/collaborations");
+
+// playlist songs collaborations
+const playlistsongs = require("./api/playlist_songs");
+const PlaylistSongsService = require("./services/postgres/playlistSongsService");
+const PlaylistSongsValidator = require("./validator/playlist_songs");
+
+// playlist song activities
+const playlistsongactivities = require("./api/playlist_song_activities");
+const PlaylistSongActivitiesService = require("./services/postgres/playlistSongActivitiesService");
+const PlaylistSongActivitiesValidator = require("./validator/playlist_song_activities");
+
 const init = async () => {
+  const collaborationsService = new CollaborationsService();
+  const playlistSongsService = new PlaylistSongsService();
+  const playlistSongActivitiesService = new PlaylistSongActivitiesService();
   const albumsService = new AlbumsService();
   const songsService = new SongsService();
+  const playlistsService = new PlaylistsService(collaborationsService);
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
 
@@ -96,9 +120,44 @@ const init = async () => {
         validator: AuthenticationsValidator,
       },
     },
+    {
+      plugin: playlists,
+      options: {
+        service: playlistsService,
+        validator: PlaylistsValidator,
+      },
+    },
+    {
+      plugin: collaborations,
+      options: {
+        service: { collaborationsService, playlistsService, usersService },
+        validator: CollaborationsValidator,
+      },
+    },
+    {
+      plugin: playlistsongs,
+      options: {
+        service: {
+          playlistSongsService,
+          playlistsService,
+          songsService,
+          playlistSongActivitiesService,
+        },
+        validator: PlaylistSongsValidator,
+      },
+    },
+    {
+      plugin: playlistsongactivities,
+      options: {
+        service: {
+          playlistsService,
+          playlistSongActivitiesService,
+        },
+        validator: PlaylistSongActivitiesValidator,
+      },
+    },
   ]);
 
-  // dicoding review
   server.ext("onPreResponse", (request, h) => {
     // mendapatkan konteks response dari request
     const { response } = request;

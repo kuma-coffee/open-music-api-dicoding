@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/kuma-coffee/open-music-api-dicoding#readme",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "nodemon": "^3.0.1"
   },
   "dependencies": {

@@ -24,9 +24,11 @@ class UserAlbumLikesHandler {
   }
 
   async getUserAlbumLikesByIdHandler(request, h) {
+    const { id: credentialId } = request.auth.credentials;
     const { id: albumId } = request.params;
 
     const userAlbumLikes = await this._userAlbumLikes.getUserAlbumLikes(
+      credentialId,
       albumId
     );
     return {

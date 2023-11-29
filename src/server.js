@@ -4,7 +4,6 @@ const Hapi = require("@hapi/hapi");
 const Jwt = require("@hapi/jwt");
 const Inert = require("@hapi/inert");
 const config = require("./utils/config");
-const path = require("path");
 
 // error
 const ClientError = require("./exceptions/ClientError");
@@ -67,6 +66,7 @@ const UserAlbumLikesService = require("./services/postgres/userAlbumLikesService
 
 // cache
 const CacheService = require("./services/redis/CacheService");
+const { error } = require("./validator/albums/schema");
 
 const init = async () => {
   const cacheService = new CacheService();

@@ -24,8 +24,7 @@ class UploadsHandler {
 
     const fileLocation = await this._uploadsService.writeFile(
       cover,
-      cover.hapi,
-      albumId
+      cover.hapi
     );
 
     await this._albumsService.addAlbumCover(fileLocation, albumId);

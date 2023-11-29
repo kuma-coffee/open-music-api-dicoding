@@ -6,7 +6,7 @@ module.exports = {
   version: "1.0.0",
   register: async (server, { service, validator }) => {
     const uploadsHandler = new UploadsHandler(
-      service.uploadsService,
+      service.storageService,
       service.albumsService,
       validator
     );

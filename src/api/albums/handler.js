@@ -61,7 +61,7 @@ class AlbumHandler {
         album: {
           ...albumById,
           songs: [...songsInAlbum],
-          coverUrl: coverName,
+          coverUrl: coverName.cover,
         },
       },
     };

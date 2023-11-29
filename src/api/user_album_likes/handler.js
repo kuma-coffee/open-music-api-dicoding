@@ -33,16 +33,25 @@ class UserAlbumLikesHandler {
       albumId
     );
 
+    if (userAlbumLikes.header == "cache") {
+      const response = h.response({
+        status: "success",
+        message: "Berhasil mendapatkan data suka",
+        data: {
+          likes: parseInt(userAlbumLikes.data),
+        },
+      });
+      response.header("X-Data-Source", "cache");
+      return response;
+    }
+
     const response = h.response({
       status: "success",
       message: "Berhasil mendapatkan data suka",
       data: {
-        likes: parseInt(userAlbumLikes.count),
+        likes: parseInt(userAlbumLikes),
       },
     });
-
-    response.header("X-Data-Source", "cache");
-
     return response;
   }
 

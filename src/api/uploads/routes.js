@@ -1,9 +1,7 @@
-const path = require("path");
-
 const routes = (handler) => [
   {
     method: "POST",
-    path: "/upload/images/albums/{id}/covers",
+    path: "/albums/{id}/covers",
     handler: (request, h) => handler.postUploadImageHandler(request, h),
     options: {
       payload: {
@@ -13,11 +11,6 @@ const routes = (handler) => [
         maxBytes: 512000,
       },
     },
-  },
-  {
-    method: "GET",
-    path: "/albums/{id}",
-    handler: (request, h) => handler.getUploadImageById(request, h),
   },
 ];
 

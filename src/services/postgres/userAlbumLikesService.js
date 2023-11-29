@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 const { nanoid } = require("nanoid");
 const InvariantError = require("../../exceptions/InvariantError");
+const ClientError = require("../../exceptions/ClientError");
 
 class UserAlbumLikesService {
   constructor(cacheService) {
@@ -12,7 +13,7 @@ class UserAlbumLikesService {
     const id = `likes-${nanoid(16)}`;
 
     const query = {
-      text: "INSERT INTO user_album_likes VALUES($1, $, $3) RETURNING id",
+      text: "INSERT INTO user_album_likes VALUES($1, $2, $3) RETURNING id",
       values: [id, userId, albumId],
     };
 
@@ -22,13 +23,13 @@ class UserAlbumLikesService {
       throw new InvariantError("Suka gagal ditambahkan");
     }
 
-    await this._cacheService.delete(`songs:${userId}`);
+    await this._cacheService.delete(`songs:${albumId}`);
     return result.rows[0].id;
   }
 
-  async getUserAlbumLikes(userId, albumId) {
+  async getUserAlbumLikes(albumId) {
     try {
-      const result = await this._cacheService.get(`songs:${userId}`);
+      const result = await this._cacheService.get(`songs:${albumId}`);
       return JSON.parse(result);
     } catch (error) {
       const query = {
@@ -45,12 +46,33 @@ class UserAlbumLikesService {
       const mappedResult = result.rows[0];
 
       await this._cacheService.set(
-        `songs:${userId}`,
+        `songs:${albumId}`,
         JSON.stringify(mappedResult)
       );
 
       return mappedResult;
     }
+  }
+
+  async getUserAlbumLikesById(userId, albumId) {
+    const query = {
+      text: "SELECT COALESCE(COUNT(*), 0) FROM user_album_likes WHERE user_id = $1 AND album_id = $2",
+      values: [userId, albumId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new InvariantError("Gagal mendapatkan data");
+    }
+
+    const count = result.rows[0].coalesce;
+
+    if (count != 0) {
+      throw new InvariantError("Like sudah ada");
+    }
+
+    return count;
   }
 
   async deleteUserAlbumLikes(userId, albumId) {
@@ -64,7 +86,7 @@ class UserAlbumLikesService {
     if (!result.rows.length) {
       throw new InvariantError("Suka gagal dihapus");
     }
-    await this._cacheService.delete(`songs:${userId}`);
+    await this._cacheService.delete(`songs:${albumId}`);
   }
 }
 

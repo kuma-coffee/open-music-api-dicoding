@@ -1,12 +1,15 @@
 class UserAlbumLikesHandler {
-  constructor(userAlbumLikes) {
+  constructor(userAlbumLikes, albumsService) {
     this._userAlbumLikes = userAlbumLikes;
+    this._albumsService = albumsService;
   }
 
   async postUserAlbumLikesHandler(request, h) {
     const { id: credentialId } = request.auth.credentials;
     const { id: albumId } = request.params;
 
+    await this._albumsService.getAlbumById(albumId);
+    await this._userAlbumLikes.getUserAlbumLikesById(credentialId, albumId);
     const userAlbumLikesId = await this._userAlbumLikes.addUserAlbumLikes(
       credentialId,
       albumId
@@ -24,18 +27,16 @@ class UserAlbumLikesHandler {
   }
 
   async getUserAlbumLikesByIdHandler(request, h) {
-    const { id: credentialId } = request.auth.credentials;
     const { id: albumId } = request.params;
 
     const userAlbumLikes = await this._userAlbumLikes.getUserAlbumLikes(
-      credentialId,
       albumId
     );
     return {
       status: "success",
       message: "Berhasil mendapatkan data suka",
       data: {
-        likes: userAlbumLikes,
+        likes: parseInt(userAlbumLikes.count),
       },
     };
   }

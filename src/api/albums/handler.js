@@ -1,3 +1,5 @@
+const path = require("path");
+
 class AlbumHandler {
   constructor(albumsService, songsService, validator) {
     this._albumsService = albumsService;
@@ -40,6 +42,15 @@ class AlbumHandler {
     const albumById = await this._albumsService.getAlbumById(id);
     const songsInAlbum = await this._songsService.getSongByAlbumId(id);
 
+    const pathFile = path.resolve(__dirname, "..", "uploads/file/images");
+    const coverName = await this._albumsService.getCoverName(pathFile, id);
+    let cover = "";
+    if (typeof coverName === "undefined") {
+      cover = null;
+    } else {
+      cover = pathFile + "/" + coverName;
+    }
+
     return {
       status: "success",
       message: "Mendapatkan album berdasarkan id",
@@ -47,6 +58,7 @@ class AlbumHandler {
         album: {
           ...albumById,
           songs: [...songsInAlbum],
+          coverUrl: cover,
         },
       },
     };

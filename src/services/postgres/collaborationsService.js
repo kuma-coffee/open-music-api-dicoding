@@ -48,6 +48,12 @@ class CollaborationsService {
     if (!result.rows.length) {
       throw new InvariantError("Kolaborasi gagal diverifikasi");
     }
+
+    const collaborations = result.rows[0];
+
+    if (collaborations.user_id !== userId) {
+      throw new AuthorizationError("Anda tidak berhak mengakses resource ini");
+    }
   }
 }
 

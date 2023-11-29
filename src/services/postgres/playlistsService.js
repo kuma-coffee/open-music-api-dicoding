@@ -30,24 +30,40 @@ class PlaylistService {
 
   async getPlaylists(id) {
     const query = {
-      text: `SELECT p.id, p.name, u.username FROM playlists AS p 
+      text: `SELECT p.id, p.name, u.username FROM collaborations AS c 
+      LEFT JOIN playlists AS p ON p.id = c.playlist_id
       LEFT JOIN users AS u ON u.id = p.owner 
-      WHERE p.owner = $1`,
+      WHERE c.user_id = $1`,
       values: [id],
     };
     const result = await this._pool.query(query);
 
+    if (result.rows == 0) {
+      const query = {
+        text: `SELECT p.id, p.name, u.username FROM playlists AS p 
+        LEFT JOIN users AS u ON u.id = p.owner 
+        WHERE p.owner = $1`,
+        values: [id],
+      };
+
+      const result2 = await this._pool.query(query);
+      return result2.rows.map(mapDBToPlaylist);
+    }
     return result.rows.map(mapDBToPlaylist);
   }
 
-  async getPlaylistById(id, owner) {
+  async getPlaylistById(id) {
     const query = {
       text: `SELECT p.id, p.name, u.username FROM playlists AS p 
       LEFT JOIN users AS u ON u.id = p.owner 
-      WHERE p.id = $1 AND p.owner = $2`,
-      values: [id, owner],
+      WHERE p.id = $1`,
+      values: [id],
     };
     const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError("Get Playlist failed, Id not found");
+    }
 
     return result.rows.map(mapDBToPlaylist)[0];
   }

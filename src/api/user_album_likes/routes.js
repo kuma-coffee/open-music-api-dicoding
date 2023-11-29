@@ -11,9 +11,6 @@ const routes = (handler) => [
     method: "GET",
     path: "/albums/{id}/likes",
     handler: (request, h) => handler.getUserAlbumLikesByIdHandler(request, h),
-    options: {
-      auth: "openmusicapi_jwt",
-    },
   },
   {
     method: "DELETE",

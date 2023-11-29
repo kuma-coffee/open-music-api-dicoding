@@ -1,3 +1,4 @@
+const fs = require("fs").promises;
 const { Pool } = require("pg");
 const { nanoid } = require("nanoid");
 const { mapDBToAlbum, mapDBToSong } = require("../../utils");
@@ -60,8 +61,6 @@ class AlbumService {
     if (!result.rows.length) {
       throw new NotFoundError("Updating Album failed, Id not found");
     }
-
-    // return result.rows[0].id;
   }
 
   async deleteAlbumById(id) {
@@ -75,8 +74,20 @@ class AlbumService {
     if (!result.rows.length) {
       throw new NotFoundError("Deleting Album failed, Id not found");
     }
+  }
 
-    // return result.rows[0].id;
+  async getCoverName(pathFile, id) {
+    try {
+      const files = await fs.readdir(pathFile);
+
+      const coverName = files.find((file) => file.includes(id));
+
+      if (coverName) {
+        return coverName;
+      }
+    } catch (err) {
+      throw new InvariantError("Gagal membaca file");
+    }
   }
 }
 

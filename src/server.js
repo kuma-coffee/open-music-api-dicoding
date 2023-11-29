@@ -187,21 +187,21 @@ const init = async () => {
     {
       plugin: _exports,
       options: {
-        service: ProducerService,
+        service: { ProducerService, playlistsService },
         validator: ExportsValidator,
       },
     },
     {
       plugin: uploads,
       options: {
-        service: { storageService, albumsService },
+        service: storageService,
         validator: UploadsValidator,
       },
     },
     {
       plugin: useralbumlikes,
       options: {
-        service: userAlbumLikesService,
+        service: { userAlbumLikesService, albumsService },
       },
     },
   ]);

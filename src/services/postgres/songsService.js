@@ -99,8 +99,6 @@ class SongService {
     if (!result.rows.length) {
       throw new NotFoundError("Updating Song failed, Id not found");
     }
-
-    // return result.rows[0].id;
   }
 
   async deleteSongById(id) {
@@ -114,8 +112,6 @@ class SongService {
     if (!result.rows.length) {
       throw new NotFoundError("Deleting Song failed, Id not found");
     }
-
-    // return result.rows[0].id;
   }
 }
 

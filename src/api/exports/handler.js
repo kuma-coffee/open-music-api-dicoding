@@ -13,7 +13,6 @@ class ExportsHandler {
     const credentialId = request.auth.credentials.id;
     const message = {
       playlistId: playlistId,
-      userId: credentialId,
       targetEmail: request.payload.targetEmail,
     };
 

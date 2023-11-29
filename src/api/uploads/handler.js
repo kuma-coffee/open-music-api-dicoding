@@ -31,6 +31,7 @@ class UploadsHandler {
 
     const response = h.response({
       status: "success",
+      message: "Sampul berhasil diunggah",
       data: {
         fileLocation,
       },

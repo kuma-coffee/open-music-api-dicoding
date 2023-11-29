@@ -42,14 +42,17 @@ class AlbumHandler {
     const albumById = await this._albumsService.getAlbumById(id);
     const songsInAlbum = await this._songsService.getSongByAlbumId(id);
 
-    const pathFile = path.resolve(__dirname, "..", "uploads/file/images");
-    const coverName = await this._albumsService.getCoverName(pathFile, id);
-    let cover = "";
-    if (typeof coverName === "undefined") {
-      cover = null;
-    } else {
-      cover = pathFile + "/" + coverName;
-    }
+    // const pathFile = path.resolve(__dirname, "..", "uploads/file/images");
+    // const coverName = await this._albumsService.getCoverName(pathFile, id);
+    // let cover = "";
+    // if (typeof coverName === "undefined") {
+    //   cover = null;
+    // } else {
+    //   cover = pathFile + "/" + coverName;
+    // }
+    // const coverName = await this._albumsService.getCoverName(pathFile, id);
+
+    const coverName = await this._albumsService.getCoverName(id);
 
     return {
       status: "success",
@@ -58,7 +61,7 @@ class AlbumHandler {
         album: {
           ...albumById,
           songs: [...songsInAlbum],
-          coverUrl: cover,
+          coverUrl: coverName,
         },
       },
     };

@@ -1,8 +1,9 @@
 const config = require("../../utils/config");
 
 class UploadsHandler {
-  constructor(service, validator) {
-    this._service = service;
+  constructor(uploadsService, albumsService, validator) {
+    this._uploadsService = uploadsService;
+    this._albumsService = albumsService;
     this._validator = validator;
   }
 
@@ -11,13 +12,28 @@ class UploadsHandler {
     this._validator.validateImageHeaders(cover.hapi.headers);
     const { id: albumId } = request.params;
 
-    const filename = await this._service.writeFile(cover, cover.hapi, albumId);
+    // const filename = await this._uploadsService.writeFile(cover, cover.hapi, albumId);
+
+    // const response = h.response({
+    //   status: "success",
+    //   message: "Sampul berhasil diunggah",
+    //   data: {
+    //     fileLocation: `http://${config.app.host}:${config.app.port}/upload/images/${filename}`,
+    //   },
+    // });
+
+    const fileLocation = await this._uploadsService.writeFile(
+      cover,
+      cover.hapi,
+      albumId
+    );
+
+    await this._albumsService.addAlbumCover(fileLocation, albumId);
 
     const response = h.response({
       status: "success",
-      message: "Sampul berhasil diunggah",
       data: {
-        fileLocation: `http://${config.app.host}:${config.app.port}/upload/images/${filename}`,
+        fileLocation,
       },
     });
     response.code(201);

@@ -76,18 +76,34 @@ class AlbumService {
     }
   }
 
-  async getCoverName(pathFile, id) {
-    try {
-      const files = await fs.readdir(pathFile);
+  async addAlbumCover(cover, id) {
+    const updateAt = new Date().toISOString();
 
-      const coverName = files.find((file) => file.includes(id));
+    const query = {
+      text: "UPDATE albums SET cover = $1, updated_at = $2 WHERE id = $3 RETURNING id",
+      values: [cover, updateAt, id],
+    };
 
-      if (coverName) {
-        return coverName;
-      }
-    } catch (err) {
-      throw new InvariantError("Gagal membaca file");
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError("Updating Album failed, Id not found");
     }
+  }
+
+  async getCoverName(id) {
+    const query = {
+      text: "SELECT cover FROM albums WHERE id = $1",
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError("Album not found");
+    }
+
+    return result.rows[0];
   }
 }
 

@@ -19,7 +19,7 @@ class UserAlbumLikesService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError("Suka gagal ditambahkan");
     }
 
@@ -32,7 +32,7 @@ class UserAlbumLikesService {
       const result = await this._cacheService.get(`songs:${albumId}`);
 
       const response = {
-        data: JSON.parse(result).count,
+        data: JSON.parse(result),
         header: "cache",
       };
       return response;
@@ -44,7 +44,7 @@ class UserAlbumLikesService {
 
       const result = await this._pool.query(query);
 
-      if (!result.rows.length) {
+      if (!result.rowCount) {
         throw new InvariantError("Gagal mendapatkan data");
       }
 
@@ -52,7 +52,7 @@ class UserAlbumLikesService {
 
       await this._cacheService.set(
         `songs:${albumId}`,
-        JSON.stringify(mappedResult)
+        JSON.stringify(mappedResult.count)
       );
 
       return mappedResult.count;
@@ -67,7 +67,7 @@ class UserAlbumLikesService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError("Gagal mendapatkan data");
     }
 
@@ -88,7 +88,7 @@ class UserAlbumLikesService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError("Suka gagal dihapus");
     }
     await this._cacheService.delete(`songs:${albumId}`);

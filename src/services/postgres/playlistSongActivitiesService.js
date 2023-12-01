@@ -18,7 +18,7 @@ class PlaylistSongActivitiesService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError("Kolaborasi gagal ditambahkan");
     }
 
@@ -46,7 +46,7 @@ class PlaylistSongActivitiesService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError("Deleting Playlist failed, Id not found");
     }
   }

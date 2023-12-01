@@ -61,7 +61,7 @@ class PlaylistService {
     };
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError("Get Playlist failed, Id not found");
     }
 
@@ -76,7 +76,7 @@ class PlaylistService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError("Deleting Playlist failed, Id not found");
     }
   }
@@ -89,7 +89,7 @@ class PlaylistService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError("Playlist tidak ditemukan");
     }
 
